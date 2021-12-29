@@ -1,7 +1,9 @@
 name: Package
 
 on:
-  push: tags
+  push:
+    tags:
+      - "v*"
 
 jobs:
   package:
