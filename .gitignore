@@ -1,3 +1,7 @@
+# Debugging stuff
+server
+
+# maven artifacts
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -9,3 +13,19 @@ buildNumber.properties
 .mvn/timing.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
+
+# node js stuff
+node_modules
+.DS_Store
+yarn.lock
+node/
+
+# Intellij stuff
+.idea/
+sonar-example-plugin.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+.scannerwork
