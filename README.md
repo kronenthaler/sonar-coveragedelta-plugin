@@ -1,4 +1,4 @@
-# Sonar delta Coverage Plugin
+# Sonar Coverage Delta Plugin
 A Sonarqube plugin to calculate the delta coverage between the current scan and the previous one.
 
 ## Installation
