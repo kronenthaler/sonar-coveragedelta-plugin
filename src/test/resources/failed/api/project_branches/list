@@ -1,0 +1,14 @@
+{
+    "branches": [
+        {
+            "name": "master",
+            "isMain": false,
+            "type": "BRANCH",
+            "status": {
+                "qualityGateStatus": "OK"
+            },
+            "analysisDate": "2021-12-29T15:03:31+0000",
+            "excludedFromPurge": true
+        }
+    ]
+}

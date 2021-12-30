@@ -23,11 +23,11 @@ public class CoverageDeltaMetrics implements Metrics {
 
   /// Defines an intermediate metric previous_coverage, to be used by the CoverageDelta measure computer.
   public static final Metric<Double> PREVIOUS_COVERAGE = new Metric.Builder("previous_coverage", "Previous coverage of main branch", Metric.ValueType.PERCENT)
-        .setDescription("Current project coverage percentage on the main branch.")
-        .setDirection(Metric.DIRECTION_BETTER)
-        .setQualitative(false)
-        .setDomain(CoreMetrics.DOMAIN_COVERAGE)
-        .create();
+    .setDescription("Current project coverage percentage on the main branch.")
+    .setDirection(Metric.DIRECTION_BETTER)
+    .setQualitative(false)
+    .setDomain(CoreMetrics.DOMAIN_COVERAGE)
+    .create();
 
   @Override
   public List<Metric> getMetrics() {

@@ -1,0 +1,14 @@
+{
+    "component": {
+        "key": "test-project",
+        "name": "test-project",
+        "qualifier": "TRK",
+        "measures": [
+            {
+                "metric": "coverage",
+                "value": "38.5",
+                "bestValue": false
+            }
+        ]
+    }
+}

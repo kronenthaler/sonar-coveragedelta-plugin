@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 import static com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDeltaMetrics.PREVIOUS_COVERAGE;
 
@@ -52,7 +53,7 @@ public class PreviousCoverageSensor implements ProjectSensor {
   }
 
   private static String getAuthorizationHeader(Configuration configs) {
-    String payload = configs.get(org.sonar.api.CoreProperties.LOGIN).orElseThrow() + ":" + configs.get(CoreProperties.PASSWORD).orElse("");
+    String payload = configs.get(CoreProperties.LOGIN).orElseThrow() + ":" + configs.get(CoreProperties.PASSWORD).orElse("");
     return "Basic " + Base64.getEncoder().encodeToString(payload.getBytes());
   }
 
@@ -78,10 +79,11 @@ public class PreviousCoverageSensor implements ProjectSensor {
   }
 
   private Double currentCoverage(SensorContext context) throws Exception {
-    Configuration configs = context.config();
-    String componentKey = configs.get(org.sonar.api.CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
     String branch = defaultBranch(context);
     log.info("Main Branch: " + branch);
+
+    Configuration configs = context.config();
+    String componentKey = configs.get(org.sonar.api.CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
 
     try {
       SonarServerApi api = initialize(context, SonarServerApi.Endpoint.MEASURES);
@@ -102,10 +104,9 @@ public class PreviousCoverageSensor implements ProjectSensor {
     return 0.0;
   }
 
-  private String defaultBranch(SensorContext context) {
+  private String defaultBranch(SensorContext context) throws NoSuchElementException {
     Configuration configs = context.config();
-    String componentKey = configs.get(org.sonar.api.CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
-    String token = configs.get(org.sonar.api.CoreProperties.LOGIN).orElseThrow() + ":" + configs.get(CoreProperties.PASSWORD).orElse("");
+    String componentKey = configs.get(CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
 
     try {
       SonarServerApi api = initialize(context, SonarServerApi.Endpoint.PROJECT_BRANCHES);
@@ -121,7 +122,7 @@ public class PreviousCoverageSensor implements ProjectSensor {
           .filter(b -> b.isMain)
           .findFirst().orElseThrow()
           .name;
-    } catch (Exception e) {
+    } catch (IOException e) {
       e.printStackTrace();
       return "";
     }

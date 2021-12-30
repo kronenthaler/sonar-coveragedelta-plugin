@@ -1,0 +1,9 @@
+{
+    "component": {
+        "key": "test-project",
+        "name": "test-project",
+        "qualifier": "TRK",
+        "measures": [
+        ]
+    }
+}
