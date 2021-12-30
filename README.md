@@ -1,5 +1,4 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragedelta-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kronenthaler/sonar-coveragedelta-plugin&amp;utm_campaign=Badge_Grade)
-
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragedelta-plugin/dashboard?utm_source=github.com&utm_medium=referral&utm_content=kronenthaler/sonar-coveragedelta-plugin&utm_campaign=Badge_Coverage)
 
 # Sonar Coverage Delta Plugin
