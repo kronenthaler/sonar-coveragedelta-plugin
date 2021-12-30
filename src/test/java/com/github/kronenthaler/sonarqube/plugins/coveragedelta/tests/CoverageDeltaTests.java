@@ -1,5 +1,7 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures;
+package com.github.kronenthaler.sonarqube.plugins.coveragedelta.tests;
 
+import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDelta;
+import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDeltaMetrics;
 import org.junit.Test;
 import org.sonar.api.ce.measure.Component;
 import org.sonar.api.ce.measure.Measure;

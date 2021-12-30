@@ -1,5 +1,6 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.api;
+package com.github.kronenthaler.sonarqube.plugins.coveragedelta.tests;
 
+import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.SonarServerApi;
 import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.*;
 import junit.framework.TestCase;
 import org.junit.Test;

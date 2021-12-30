@@ -1,8 +1,10 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures;
+package com.github.kronenthaler.sonarqube.plugins.coveragedelta.tests;
 
 import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.SonarServerApi;
 import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.SonarMeasure;
 import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.SonarProjectBranches;
+import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDeltaMetrics;
+import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.PreviousCoverageSensor;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
