@@ -21,6 +21,7 @@ public class SonarServerApi {
     this.endpoint = endpoint;
   }
 
+  // TODO: refactor to allow the headers and parameters to be null
   public <Result> Result connect(Map<String, String> parameters, Map<String, String> headers, Class<Result> resultClass) throws IOException {
     URL apiUrl = new URL(String.format("%s/%s?%s", this.host, this.endpoint.path, convertParameters(parameters)));
 
@@ -29,9 +30,7 @@ public class SonarServerApi {
     conn.setDoInput(true);
     conn.setDoOutput(true);
 
-    for (Map.Entry<String, String> header : headers.entrySet()) {
-      conn.setRequestProperty(header.getKey(), header.getValue());
-    }
+    setHeaders(conn, headers);
 
     int statusCode = conn.getResponseCode();
     if (statusCode >= 200 && statusCode < 400) {
@@ -45,7 +44,19 @@ public class SonarServerApi {
     return null;
   }
 
+  private void setHeaders(HttpURLConnection conn, Map<String, String> headers){
+    if(headers != null) {
+      for (Map.Entry<String, String> header : headers.entrySet()) {
+        conn.setRequestProperty(header.getKey(), header.getValue());
+      }
+    }
+  }
+
   private String convertParameters(Map<String, String> params) throws UnsupportedEncodingException {
+    if(params == null) {
+      return "";
+    }
+
     StringBuilder queryString = new StringBuilder();
     String charset = Charset.defaultCharset().name();
     for (Map.Entry<String, String> param : params.entrySet()) {
