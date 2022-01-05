@@ -1,7 +1,7 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.tests;
+package com.github.kronenthaler.sonarqube.plugins.coveragevariation.tests;
 
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDelta;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDeltaMetrics;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.CoverageVariation;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.CoverageVariationMetrics;
 import org.junit.Test;
 import org.sonar.api.ce.measure.Component;
 import org.sonar.api.ce.measure.Measure;
@@ -11,7 +11,7 @@ import org.sonar.api.measures.CoreMetrics;
 import static org.mockito.Mockito.*;
 
 
-public class CoverageDeltaTests {
+public class CoverageVariationTests {
 
   @Test
   public void testComputeOnFile() {
@@ -22,7 +22,7 @@ public class CoverageDeltaTests {
     when(context.getComponent()).thenReturn(component);
     doNothing().when(context).addMeasure(isA(String.class), isA(Double.class));
 
-    CoverageDelta target = new CoverageDelta();
+    CoverageVariation target = new CoverageVariation();
     target.compute(context);
 
     verify(context, never()).addMeasure(anyString(), anyDouble());
@@ -41,13 +41,29 @@ public class CoverageDeltaTests {
 
     MeasureComputer.MeasureComputerContext context = mock(MeasureComputer.MeasureComputerContext.class);
     when(context.getComponent()).thenReturn(component);
-    when(context.getMeasure(CoverageDeltaMetrics.PREVIOUS_COVERAGE.getKey())).thenReturn(previousMeasure);
+    when(context.getMeasure(CoverageVariationMetrics.PREVIOUS_COVERAGE.getKey())).thenReturn(previousMeasure);
     when(context.getMeasure(CoreMetrics.COVERAGE.getKey())).thenReturn(coverageMeasure);
     doNothing().when(context).addMeasure(isA(String.class), isA(Double.class));
 
-    CoverageDelta target = new CoverageDelta();
+    CoverageVariation target = new CoverageVariation();
     target.compute(context);
 
-    verify(context, times(1)).addMeasure(CoverageDeltaMetrics.COVERAGE_DELTA.key(), -1.0);
+    verify(context, times(1)).addMeasure(CoverageVariationMetrics.COVERAGE_VARIATION.key(), -1.0);
+  }
+
+  @Test
+  public void testComputeSensorDisabled() {
+    Component component = mock(Component.class);
+    when(component.getType()).thenReturn(Component.Type.PROJECT);
+
+    MeasureComputer.MeasureComputerContext context = mock(MeasureComputer.MeasureComputerContext.class);
+    when(context.getComponent()).thenReturn(component);
+    doNothing().when(context).addMeasure(isA(String.class), isA(Double.class));
+    when(context.getMeasure(CoverageVariationMetrics.PREVIOUS_COVERAGE.getKey())).thenReturn(null);
+
+    CoverageVariation target = new CoverageVariation();
+    target.compute(context);
+
+    verify(context, never()).addMeasure(anyString(), anyDouble());
   }
 }

@@ -1,8 +1,8 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragedelta-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kronenthaler/sonar-coveragedelta-plugin&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragedelta-plugin/dashboard?utm_source=github.com&utm_medium=referral&utm_content=kronenthaler/sonar-coveragedelta-plugin&utm_campaign=Badge_Coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragevariation-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kronenthaler/sonar-coveragevariation-plugin&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragevariation-plugin/dashboard?utm_source=github.com&utm_medium=referral&utm_content=kronenthaler/sonar-coveragevariation-plugin&utm_campaign=Badge_Coverage)
 
-# Sonar Coverage Delta Plugin
-A Sonarqube plugin to calculate the delta coverage between the current scan and the previous one.
+# Sonar Coverage Variation Plugin
+A Sonarqube plugin to calculate the variation coverage between the current scan and the previous one.
 
 ## Requirements
 
@@ -20,7 +20,7 @@ Define a condition for the Quality Gate that you want to monitor. This cannot be
 However, it's possible to create the condition using the web APIs. 
 
 ```shell
-curl -X POST -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/create_condition?error=<error-threshold>&gateName=<qg-name>&metric=coverage_delta&op=LT"
+curl -X POST -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/qualitygates/create_condition?error=<error-threshold>&gateName=<qg-name>&metric=coverage_variation&op=LT"
 ```
 
 Where:
@@ -28,9 +28,13 @@ Where:
 * `SONAR_HOST_URL`: the url to the sonar instance to configure the quality gate condition
 * `error-threshold`: the maximum percentual difference to allow on new code. Ideally, 0 (per-cent) decrease. But it can be set to -1 or -2 for some leniency.
 * `qg-name`: the Quality Gate to add the condition to.
-* `coverage_delta`: this is the new metric we want to add. Do not change this.
-* `LT`: the direction we want to validate the change of delta. LT means less than `<error-threshold>` will fail the Quality Gate.
+* `coverage_variation`: this is the new metric we want to add. Do not change this.
+* `LT`: the direction we want to validate the change of variation. LT means less than `<error-threshold>` will fail the Quality Gate.
 
 ## Usage
 
-Scan as normal!
+For safety, the variation scan is disabled by default. To enable it, add the following property to your scanner command:
+
+```shell
+sonar-scanner -Dsonar.coverage.variation.enabled=true ...
+```

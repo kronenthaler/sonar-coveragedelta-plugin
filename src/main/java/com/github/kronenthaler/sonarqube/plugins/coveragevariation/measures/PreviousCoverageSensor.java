@@ -17,11 +17,12 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures;
+package com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures;
 
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.SonarMeasure;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.SonarProjectBranches;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.SonarServerApi;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.CoverageVariationPlugin;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.SonarMeasure;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.SonarProjectBranches;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.SonarServerApi;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -37,7 +38,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
-import static com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDeltaMetrics.PREVIOUS_COVERAGE;
+import static com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.CoverageVariationMetrics.PREVIOUS_COVERAGE;
 
 /**
  * Scanner feeds raw measures on files but must not aggregate values to directories and project.
@@ -59,11 +60,16 @@ public class PreviousCoverageSensor implements ProjectSensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.name("Coverage delta sensor");
+    descriptor.name("Coverage variation sensor");
   }
 
   @Override
   public void execute(SensorContext context) {
+    // if the sensor is disabled skip the processing
+    if (!context.config().getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY).orElse(false)){
+      return;
+    }
+
     try {
       Double defaultBranchCoverage = currentCoverage(context);
       log.info("Default Branch coverage: " + defaultBranchCoverage);

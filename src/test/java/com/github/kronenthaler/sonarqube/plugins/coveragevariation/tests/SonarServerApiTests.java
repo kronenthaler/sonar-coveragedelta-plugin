@@ -1,26 +1,22 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.tests;
+package com.github.kronenthaler.sonarqube.plugins.coveragevariation.tests;
 
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.SonarServerApi;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.*;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.SonarServerApi;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.*;
 import org.hamcrest.core.StringContains;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedConstruction;
 import org.mockito.Mockito;
-import org.sonar.api.measures.Metric;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
 import static junit.framework.TestCase.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.Mockito.*;
 
 public class SonarServerApiTests {

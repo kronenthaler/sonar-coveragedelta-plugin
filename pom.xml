@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.sonarsource.plugins.coveragedelta</groupId>
-  <artifactId>sonar-coveragedelta-plugin</artifactId>
+  <groupId>org.sonarsource.plugins.coveragevariation</groupId>
+  <artifactId>sonar-coveragevariation-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
   <version>1.0.0</version>
 
-  <name>Coverage Delta Plugin for SonarQube 9.x</name>
-  <description>Plugin calculates the delta of the coverage between the current scan and the main branch's coverage</description>
+  <name>Coverage Variation Plugin for SonarQube 9.x</name>
+  <description>Plugin calculates the variation of the coverage between the current scan and the main branch's coverage</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,8 +64,8 @@
         <version>1.18.0.372</version>
         <extensions>true</extensions>
         <configuration>
-          <pluginKey>coveragedelta</pluginKey>
-          <pluginClass>com.github.kronenthaler.sonarqube.plugins.coveragedelta.CoverageDeltaPlugin</pluginClass>
+          <pluginKey>coveragevariation</pluginKey>
+          <pluginClass>com.github.kronenthaler.sonarqube.plugins.coveragevariation.CoverageVariationPlugin</pluginClass>
         </configuration>
       </plugin>
       <plugin>

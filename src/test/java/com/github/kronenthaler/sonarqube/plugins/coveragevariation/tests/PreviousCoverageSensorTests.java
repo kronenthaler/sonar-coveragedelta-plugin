@@ -1,10 +1,11 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.tests;
+package com.github.kronenthaler.sonarqube.plugins.coveragevariation.tests;
 
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.SonarServerApi;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.SonarMeasure;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models.SonarProjectBranches;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.CoverageDeltaMetrics;
-import com.github.kronenthaler.sonarqube.plugins.coveragedelta.measures.PreviousCoverageSensor;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.CoverageVariationPlugin;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.SonarServerApi;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.SonarMeasure;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.SonarProjectBranches;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.CoverageVariationMetrics;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.PreviousCoverageSensor;
 import com.google.gson.Gson;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -39,6 +40,7 @@ public class PreviousCoverageSensorTests {
     when(configs.get(CoreProperties.PROJECT_KEY_PROPERTY)).thenReturn(Optional.of("list-project"));
     when(configs.get(CoreProperties.LOGIN)).thenReturn(Optional.of("user"));
     when(configs.get(CoreProperties.PASSWORD)).thenReturn(Optional.of("123456"));
+    when(configs.getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY)).thenReturn(Optional.of(true));
 
     SensorContext context = mock(SensorContext.class);
     when(context.config()).thenReturn(configs);
@@ -69,6 +71,7 @@ public class PreviousCoverageSensorTests {
     when(configs.get(CoreProperties.PROJECT_KEY_PROPERTY)).thenReturn(Optional.of("list-project"));
     when(configs.get(CoreProperties.LOGIN)).thenReturn(Optional.of("user"));
     when(configs.get(CoreProperties.PASSWORD)).thenReturn(Optional.of("123456"));
+    when(configs.getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY)).thenReturn(Optional.of(true));
 
     SensorContext context = mock(SensorContext.class);
     when(context.config()).thenReturn(configs);
@@ -98,6 +101,7 @@ public class PreviousCoverageSensorTests {
     when(configs.get(CoreProperties.PROJECT_KEY_PROPERTY)).thenReturn(Optional.of("list-project"));
     when(configs.get(CoreProperties.LOGIN)).thenReturn(Optional.of("user"));
     when(configs.get(CoreProperties.PASSWORD)).thenReturn(Optional.of("123456"));
+    when(configs.getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY)).thenReturn(Optional.of(true));
 
     InputProject project = mock(InputProject.class);
 
@@ -133,8 +137,28 @@ public class PreviousCoverageSensorTests {
     }
 
     verify(newMeasure, times(1)).save();
-    assertEquals(metricCapture.getValue(), CoverageDeltaMetrics.PREVIOUS_COVERAGE);
+    assertEquals(metricCapture.getValue(), CoverageVariationMetrics.PREVIOUS_COVERAGE);
     assertEquals(componentCapture.getValue(), project);
     assertEquals(valueCapture.getValue(), (Double) 38.5);
+  }
+
+  @Test
+  public void testExecuteWithSensorDisabled() {
+    System.err.println(basePath);
+
+    Configuration configs = mock(Configuration.class);
+    when(configs.get("sonar.host.url")).thenReturn(Optional.of(baseUrl + "failed/"));
+    when(configs.get(CoreProperties.PROJECT_KEY_PROPERTY)).thenReturn(Optional.of("list-project"));
+    when(configs.get(CoreProperties.LOGIN)).thenReturn(Optional.of("user"));
+    when(configs.get(CoreProperties.PASSWORD)).thenReturn(Optional.of("123456"));
+    when(configs.getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY)).thenReturn(Optional.of(false));
+
+    SensorContext context = mock(SensorContext.class);
+    when(context.config()).thenReturn(configs);
+
+    PreviousCoverageSensor sensor = new PreviousCoverageSensor();
+    sensor.execute(context);
+
+    verify(context, never()).newMeasure();
   }
 }

@@ -1,4 +1,4 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.api;
+package com.github.kronenthaler.sonarqube.plugins.coveragevariation.api;
 
 import com.google.gson.Gson;
 

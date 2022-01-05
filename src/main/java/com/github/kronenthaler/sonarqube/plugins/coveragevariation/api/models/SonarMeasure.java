@@ -1,4 +1,4 @@
-package com.github.kronenthaler.sonarqube.plugins.coveragedelta.api.models;
+package com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models;
 
 public class SonarMeasure {
   public SonarMeasure.Component component;
