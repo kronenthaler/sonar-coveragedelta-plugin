@@ -12,11 +12,11 @@ import org.sonar.api.Property;
  * Plugin definition and entry point for the plugin, defined in the pom.xml
  */
 @Properties(
-  @Property(key = CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY,
-      defaultValue = "false",
-      name = "coverage variation enabled",
-      description = "Enable the variation calculation",
-      category = CoreProperties.CATEGORY_CODE_COVERAGE)
+    @Property(key = CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY,
+        defaultValue = "false",
+        name = "coverage variation enabled",
+        description = "Enable the variation calculation",
+        category = CoreProperties.CATEGORY_CODE_COVERAGE)
 )
 public class CoverageVariationPlugin implements Plugin {
   public static final String COVERAGE_VARIATION_ENABLED_KEY = "sonar.coverage.variation.enabled";

@@ -48,11 +48,11 @@ public class PreviousCoverageSensorTests {
       Gson gson = new Gson();
 
       String branches = new String(new BufferedInputStream(new FileInputStream(basePath + "failed/" + SonarServerApi.Endpoint.PROJECT_BRANCHES.path)).readAllBytes());
-      when(mock.connect(any(), any(), eq(SonarProjectBranches.class)))
+      when(mock.connect(any(), eq(SonarProjectBranches.class)))
           .thenReturn(gson.fromJson(branches, SonarProjectBranches.class));
 
       String measure = new String(new BufferedInputStream(new FileInputStream(basePath + "success/" + SonarServerApi.Endpoint.MEASURES.path)).readAllBytes());
-      when(mock.connect(any(), any(), eq(SonarMeasure.class)))
+      when(mock.connect(any(), eq(SonarMeasure.class)))
           .thenReturn(gson.fromJson(measure, SonarMeasure.class));
 
     })) {
@@ -80,11 +80,11 @@ public class PreviousCoverageSensorTests {
       Gson gson = new Gson();
 
       String branches = new String(new BufferedInputStream(new FileInputStream(basePath + "success/" + SonarServerApi.Endpoint.PROJECT_BRANCHES.path)).readAllBytes());
-      when(mock.connect(any(), any(), eq(SonarProjectBranches.class)))
+      when(mock.connect(any(), eq(SonarProjectBranches.class)))
           .thenReturn(gson.fromJson(branches, SonarProjectBranches.class));
 
       String measure = new String(new BufferedInputStream(new FileInputStream(basePath + "failed/" + SonarServerApi.Endpoint.MEASURES.path)).readAllBytes());
-      when(mock.connect(any(), any(), eq(SonarMeasure.class)))
+      when(mock.connect(any(), eq(SonarMeasure.class)))
           .thenReturn(gson.fromJson(measure, SonarMeasure.class));
 
     })) {
@@ -124,11 +124,11 @@ public class PreviousCoverageSensorTests {
       Gson gson = new Gson();
 
       String branches = new String(new BufferedInputStream(new FileInputStream(basePath + "success/" + SonarServerApi.Endpoint.PROJECT_BRANCHES.path)).readAllBytes());
-      when(mock.connect(any(), any(), eq(SonarProjectBranches.class)))
+      when(mock.connect(any(), eq(SonarProjectBranches.class)))
           .thenReturn(gson.fromJson(branches, SonarProjectBranches.class));
 
       String measure = new String(new BufferedInputStream(new FileInputStream(basePath + "success/" + SonarServerApi.Endpoint.MEASURES.path)).readAllBytes());
-      when(mock.connect(any(), any(), eq(SonarMeasure.class)))
+      when(mock.connect(any(), eq(SonarMeasure.class)))
           .thenReturn(gson.fromJson(measure, SonarMeasure.class));
 
     })) {
@@ -137,9 +137,9 @@ public class PreviousCoverageSensorTests {
     }
 
     verify(newMeasure, times(1)).save();
-    assertEquals(metricCapture.getValue(), CoverageVariationMetrics.PREVIOUS_COVERAGE);
-    assertEquals(componentCapture.getValue(), project);
-    assertEquals(valueCapture.getValue(), (Double) 38.5);
+    assertEquals(CoverageVariationMetrics.PREVIOUS_COVERAGE, metricCapture.getValue());
+    assertEquals(project, componentCapture.getValue());
+    assertEquals((Double) 38.5, valueCapture.getValue());
   }
 
   @Test

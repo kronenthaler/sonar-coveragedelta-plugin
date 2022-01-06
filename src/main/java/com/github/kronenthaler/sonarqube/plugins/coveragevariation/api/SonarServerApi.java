@@ -6,6 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
@@ -13,18 +14,17 @@ import java.util.Map;
 
 
 public class SonarServerApi {
-  private final String host;
-  private final Endpoint endpoint;
+  private final URL apiUrl;
 
-  public SonarServerApi(String host, Endpoint endpoint) {
-    this.host = host;
-    this.endpoint = endpoint;
+  public SonarServerApi(String host, Endpoint endpoint, Map<String, String> parameters) throws MalformedURLException, UnsupportedEncodingException {
+    this(new URL(String.format("%s/%s?%s", host, endpoint, convertParameters(parameters))));
   }
 
-  // TODO: refactor to allow the headers and parameters to be null
-  public <Result> Result connect(Map<String, String> parameters, Map<String, String> headers, Class<Result> resultClass) throws IOException {
-    URL apiUrl = new URL(String.format("%s/%s?%s", this.host, this.endpoint.path, convertParameters(parameters)));
+  public SonarServerApi(URL url) {
+    this.apiUrl = url;
+  }
 
+  public <T> T connect(Map<String, String> headers, Class<T> resultClass) throws IOException {
     HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
     conn.setInstanceFollowRedirects(true);
     conn.setDoInput(true);
@@ -44,16 +44,16 @@ public class SonarServerApi {
     return null;
   }
 
-  private void setHeaders(HttpURLConnection conn, Map<String, String> headers){
-    if(headers != null) {
+  private static void setHeaders(HttpURLConnection conn, Map<String, String> headers) {
+    if (headers != null) {
       for (Map.Entry<String, String> header : headers.entrySet()) {
         conn.setRequestProperty(header.getKey(), header.getValue());
       }
     }
   }
 
-  private String convertParameters(Map<String, String> params) throws UnsupportedEncodingException {
-    if(params == null) {
+  public static String convertParameters(Map<String, String> params) throws UnsupportedEncodingException {
+    if (params == null) {
       return "";
     }
 

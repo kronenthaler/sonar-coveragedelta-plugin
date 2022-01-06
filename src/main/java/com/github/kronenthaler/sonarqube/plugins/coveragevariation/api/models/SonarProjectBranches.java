@@ -1,10 +1,22 @@
 package com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models;
 
 public class SonarProjectBranches {
-  public Branch[] branches;
+  private Branch[] branches;
+
+  public Branch[] getBranches() {
+    return branches;
+  }
 
   public static class Branch {
-    public String name;
-    public Boolean isMain;
+    private String name;
+    private Boolean isMain;
+
+    public String getName() {
+      return name;
+    }
+
+    public Boolean isMain() {
+      return isMain;
+    }
   }
 }

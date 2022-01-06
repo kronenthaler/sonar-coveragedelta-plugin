@@ -1,18 +1,25 @@
 package com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models;
 
 public class SonarMeasure {
-  public SonarMeasure.Component component;
+  private SonarMeasure.Component component;
+
+  public SonarMeasure.Component getComponent() {
+    return component;
+  }
 
   public static class Component {
-    public String key;
-    public String name;
-    public String qualifier;
-    public SonarMeasure.Component.Measure[] measures;
+    private SonarMeasure.Component.Measure[] measures;
+
+    public SonarMeasure.Component.Measure[] getMeasures() {
+      return measures;
+    }
 
     public static class Measure {
-      public String metric;
-      public String value;
-      public Boolean bestValue;
+      private String value;
+
+      public String getValue() {
+        return value;
+      }
     }
   }
 }

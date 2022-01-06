@@ -20,9 +20,9 @@
 package com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures;
 
 import com.github.kronenthaler.sonarqube.plugins.coveragevariation.CoverageVariationPlugin;
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.SonarServerApi;
 import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.SonarMeasure;
 import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.models.SonarProjectBranches;
-import com.github.kronenthaler.sonarqube.plugins.coveragevariation.api.SonarServerApi;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
@@ -47,11 +47,7 @@ import static com.github.kronenthaler.sonarqube.plugins.coveragevariation.measur
 @SuppressWarnings("Since15")
 @ScannerSide
 public class PreviousCoverageSensor implements ProjectSensor {
-  static private final Logger log = Loggers.get(PreviousCoverageSensor.class);
-
-  private static SonarServerApi initialize(SensorContext context, SonarServerApi.Endpoint endpoint) {
-    return new SonarServerApi(context.config().get("sonar.host.url").orElseThrow(), endpoint);
-  }
+  private static final Logger log = Loggers.get(PreviousCoverageSensor.class);
 
   private static String getAuthorizationHeader(Configuration configs) {
     String payload = configs.get(CoreProperties.LOGIN).orElseThrow() + ":" + configs.get(CoreProperties.PASSWORD).orElse("");
@@ -66,7 +62,7 @@ public class PreviousCoverageSensor implements ProjectSensor {
   @Override
   public void execute(SensorContext context) {
     // if the sensor is disabled skip the processing
-    if (!context.config().getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY).orElse(false)){
+    if (!context.config().getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY).orElse(false)) {
       return;
     }
 
@@ -80,57 +76,49 @@ public class PreviousCoverageSensor implements ProjectSensor {
           .withValue(defaultBranchCoverage)
           .save();
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error("Error while calculating the previous coverage", e);
     }
   }
 
-  private Double currentCoverage(SensorContext context) throws Exception {
+  private Double currentCoverage(SensorContext context) throws NoSuchElementException, IOException {
     String branch = defaultBranch(context);
     log.info("Main Branch: " + branch);
 
     Configuration configs = context.config();
     String componentKey = configs.get(org.sonar.api.CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
 
-    try {
-      SonarServerApi api = initialize(context, SonarServerApi.Endpoint.MEASURES);
-      HashMap<String, String> params = new HashMap<>();
-      params.put("component", componentKey);
-      params.put("metricKeys", "coverage");
-      params.put("branch", branch);
+    HashMap<String, String> params = new HashMap<>();
+    params.put("component", componentKey);
+    params.put("metricKeys", "coverage");
+    params.put("branch", branch);
 
-      HashMap<String, String> headers = new HashMap<>();
-      headers.put("Authorization", getAuthorizationHeader(configs));
+    SonarServerApi api = new SonarServerApi(context.config().get("sonar.host.url").orElseThrow(), SonarServerApi.Endpoint.MEASURES, params);
 
-      SonarMeasure measure = api.connect(params, headers, SonarMeasure.class);
-      return Double.parseDouble(measure.component.measures[0].value);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    HashMap<String, String> headers = new HashMap<>();
+    headers.put("Authorization", getAuthorizationHeader(configs));
 
-    return 0.0;
+    SonarMeasure measure = api.connect(headers, SonarMeasure.class);
+
+    return Double.parseDouble(measure.getComponent().getMeasures()[0].getValue());
   }
 
-  private String defaultBranch(SensorContext context) throws NoSuchElementException {
+  private String defaultBranch(SensorContext context) throws NoSuchElementException, IOException {
     Configuration configs = context.config();
     String componentKey = configs.get(CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
 
-    try {
-      SonarServerApi api = initialize(context, SonarServerApi.Endpoint.PROJECT_BRANCHES);
-      HashMap<String, String> params = new HashMap<>();
-      params.put("project", componentKey);
+    HashMap<String, String> params = new HashMap<>();
+    params.put("project", componentKey);
 
-      HashMap<String, String> headers = new HashMap<>();
-      headers.put("Authorization", getAuthorizationHeader(configs));
+    SonarServerApi api = new SonarServerApi(context.config().get("sonar.host.url").orElseThrow(), SonarServerApi.Endpoint.PROJECT_BRANCHES, params);
 
-      SonarProjectBranches branches = api.connect(params, headers, SonarProjectBranches.class);
+    HashMap<String, String> headers = new HashMap<>();
+    headers.put("Authorization", getAuthorizationHeader(configs));
 
-      return Arrays.stream(branches.branches)
-          .filter(b -> b.isMain)
-          .findFirst().orElseThrow()
-          .name;
-    } catch (IOException e) {
-      e.printStackTrace();
-      return "";
-    }
+    SonarProjectBranches branches = api.connect(headers, SonarProjectBranches.class);
+
+    return Arrays.stream(branches.getBranches())
+        .filter(SonarProjectBranches.Branch::isMain)
+        .findFirst().orElseThrow()
+        .getName();
   }
 }
