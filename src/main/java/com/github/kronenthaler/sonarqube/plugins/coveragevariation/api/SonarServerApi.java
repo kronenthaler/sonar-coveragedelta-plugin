@@ -1,6 +1,5 @@
 package com.github.kronenthaler.sonarqube.plugins.coveragevariation.api;
 
-import com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.PreviousCoverageSensor;
 import com.google.gson.Gson;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
