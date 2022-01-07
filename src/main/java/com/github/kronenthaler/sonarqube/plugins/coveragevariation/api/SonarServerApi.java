@@ -1,6 +1,9 @@
 package com.github.kronenthaler.sonarqube.plugins.coveragevariation.api;
 
+import com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures.PreviousCoverageSensor;
 import com.google.gson.Gson;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -14,10 +17,12 @@ import java.util.Map;
 
 
 public class SonarServerApi {
+  private static final Logger log = Loggers.get(SonarServerApi.class);
+
   private final URL apiUrl;
 
   public SonarServerApi(String host, Endpoint endpoint, Map<String, String> parameters) throws MalformedURLException, UnsupportedEncodingException {
-    this(new URL(String.format("%s/%s?%s", host, endpoint, convertParameters(parameters))));
+    this(new URL(String.format("%s/%s?%s", host, endpoint.path, convertParameters(parameters))));
   }
 
   public SonarServerApi(URL url) {
