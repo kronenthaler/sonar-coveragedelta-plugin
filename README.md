@@ -1,5 +1,6 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragevariation-plugin/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=kronenthaler/sonar-coveragevariation-plugin&amp;utm_campaign=Badge_Grade)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/10ec71dd97524ff4975649c6cadf8721)](https://www.codacy.com/gh/kronenthaler/sonar-coveragevariation-plugin/dashboard?utm_source=github.com&utm_medium=referral&utm_content=kronenthaler/sonar-coveragevariation-plugin&utm_campaign=Badge_Coverage)
+[![Build](https://github.com/kronenthaler/sonar-coveragedelta-plugin/actions/workflows/build.yml/badge.svg)](https://github.com/kronenthaler/sonar-coveragedelta-plugin/actions/workflows/build.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_sonar-coveragedelta-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=kronenthaler_sonar-coveragedelta-plugin)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=kronenthaler_sonar-coveragedelta-plugin&metric=coverage)](https://sonarcloud.io/summary/new_code?id=kronenthaler_sonar-coveragedelta-plugin)
 
 # Sonar Coverage Variation Plugin
 A Sonarqube plugin to calculate the variation coverage between the current scan and the previous one.
