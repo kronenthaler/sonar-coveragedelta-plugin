@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.sonarsource.plugins.coveragevariation</groupId>
+  <groupId>com.github.kronenthaler.sonarqube.plugins.coveragevariation</groupId>
   <artifactId>sonar-coveragevariation-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>2.0.0</version>
+  <version>3.0.0</version>
 
   <name>Coverage Variation Plugin for SonarQube 9.x</name>
   <description>Plugin calculates the variation of the coverage between the current scan and the main branch's coverage</description>
