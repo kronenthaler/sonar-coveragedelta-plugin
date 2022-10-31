@@ -5,7 +5,7 @@
   <groupId>com.github.kronenthaler.sonarqube.plugins.coveragevariation</groupId>
   <artifactId>sonar-coveragevariation-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>3.0.1</version>
+  <version>3.0.2</version>
 
   <name>Coverage Variation Plugin for SonarQube 9.x</name>
   <description>Plugin calculates the variation of the coverage between the current scan and the main branch's coverage</description>

@@ -39,6 +39,7 @@ public class SonarServerApi {
     int statusCode = conn.getResponseCode();
 
     log.debug("API URL: "+ apiUrl);
+    log.debug("Headers: "+ headers);
     log.debug("Status code: " + statusCode);
 
     if (statusCode >= 200 && statusCode < 400) {
