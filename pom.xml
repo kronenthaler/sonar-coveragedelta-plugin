@@ -12,7 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.apiVersion>9.0.1.46107</sonar.apiVersion>
+    <sonar.apiVersion>9.5.0.56709</sonar.apiVersion>
     <jdk.min.version>1.8</jdk.min.version>
     <!-- Sonar cloud properties -->
     <sonar.organization>kronenthaler</sonar.organization>
@@ -21,9 +21,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
+      <groupId>org.sonarsource.api.plugin</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.apiVersion}</version>
+      <version>9.5.0.71</version>
       <scope>provided</scope>
     </dependency>
 
