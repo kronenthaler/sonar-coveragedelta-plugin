@@ -25,7 +25,7 @@ public class CoverageVariationPlugin implements Plugin {
   public void define(Context context) {
     context
         .addExtension(CoverageVariationMetrics.class)   // Defines the metrics to be used by the Sensor and the MeasureComputer
-        .addExtension(PreviousCoverageSensor.class) // Collect the project's main branch current coverage
+        .addExtension(PreviousCoverageSensor.class)     // Collect the project's main branch current coverage
         .addExtension(CoverageVariation.class);         // Calculates the variation of the coverage of the main branch current coverage and this scan coverage
   }
 }

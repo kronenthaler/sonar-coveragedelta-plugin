@@ -88,12 +88,12 @@ public class SonarServerApiTests {
   @Test
   public void testConvertParameters() throws UnsupportedEncodingException {
     HashMap<String, String> params = new HashMap<>();
-    params.put("component", "component-key");
+    params.put("component", "composed:component-key");
     params.put("metric", "coverage");
     params.put("branch", "feature/branch/with-escapable-chars");
 
     String queryString = SonarServerApi.convertParameters(params);
-    assertThat(queryString, StringContains.containsString("component=component-key"));
+    assertThat(queryString, StringContains.containsString("component=composed%3Acomponent-key"));
     assertThat(queryString, StringContains.containsString("metric=coverage"));
     assertThat(queryString, StringContains.containsString("branch=feature%2Fbranch%2Fwith-escapable-chars"));
   }

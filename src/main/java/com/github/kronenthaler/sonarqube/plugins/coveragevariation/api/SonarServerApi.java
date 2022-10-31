@@ -37,9 +37,14 @@ public class SonarServerApi {
     setHeaders(conn, headers);
 
     int statusCode = conn.getResponseCode();
+
+    log.debug("API URL: "+ apiUrl);
+    log.debug("Status code: " + statusCode);
+
     if (statusCode >= 200 && statusCode < 400) {
       BufferedInputStream input = new BufferedInputStream(conn.getInputStream());
       String jsonResponse = new String(input.readAllBytes());
+      log.debug("JSON response: "+ jsonResponse);
 
       Gson json = new Gson();
       return json.fromJson(jsonResponse, resultClass);
