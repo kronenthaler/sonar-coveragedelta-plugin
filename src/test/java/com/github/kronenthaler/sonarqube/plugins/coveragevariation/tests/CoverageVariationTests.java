@@ -52,6 +52,26 @@ public class CoverageVariationTests {
   }
 
   @Test
+  public void testComputeOnProjectWithNoCoverageReported() {
+    Component component = mock(Component.class);
+    when(component.getType()).thenReturn(Component.Type.PROJECT);
+
+    Measure previousMeasure = mock(Measure.class);
+    when(previousMeasure.getDoubleValue()).thenReturn(90.0);
+
+    MeasureComputer.MeasureComputerContext context = mock(MeasureComputer.MeasureComputerContext.class);
+    when(context.getComponent()).thenReturn(component);
+    when(context.getMeasure(CoverageVariationMetrics.PREVIOUS_COVERAGE.getKey())).thenReturn(previousMeasure);
+    when(context.getMeasure(CoreMetrics.COVERAGE.getKey())).thenReturn(null);
+    doNothing().when(context).addMeasure(isA(String.class), isA(Double.class));
+
+    CoverageVariation target = new CoverageVariation();
+    target.compute(context);
+
+    verify(context, times(1)).addMeasure(CoverageVariationMetrics.COVERAGE_VARIATION.key(), -90.0);
+  }
+
+  @Test
   public void testComputeSensorDisabled() {
     Component component = mock(Component.class);
     when(component.getType()).thenReturn(Component.Type.PROJECT);

@@ -1,6 +1,7 @@
 package com.github.kronenthaler.sonarqube.plugins.coveragevariation.measures;
 
 import org.sonar.api.ce.measure.Component;
+import org.sonar.api.ce.measure.Measure;
 import org.sonar.api.ce.measure.MeasureComputer;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.server.ServerSide;
@@ -19,7 +20,7 @@ public class CoverageVariation implements MeasureComputer {
   public MeasureComputerDefinition define(MeasureComputerDefinitionContext def) {
     return def.newDefinitionBuilder()
         .setInputMetrics(CoreMetrics.COVERAGE.getKey(), CoverageVariationMetrics.PREVIOUS_COVERAGE.key())
-        .setOutputMetrics(CoverageVariationMetrics.COVERAGE_VARIATION.key())
+        .setOutputMetrics(CoverageVariationMetrics.COVERAGE_VARIATION.key(), CoverageVariationMetrics.NEW_COVERAGE_VARIATION.key())
         .build();
   }
 
@@ -31,9 +32,12 @@ public class CoverageVariation implements MeasureComputer {
       return;
     }
 
-    Double scanCoverage = context.getMeasure(CoreMetrics.COVERAGE.getKey()).getDoubleValue();
-    Double currentCoverage = context.getMeasure(CoverageVariationMetrics.PREVIOUS_COVERAGE.getKey()).getDoubleValue();
+    Measure scanCoverageMeasure = context.getMeasure(CoreMetrics.COVERAGE.getKey());
+    Measure currentCoverageMeasure = context.getMeasure(CoverageVariationMetrics.PREVIOUS_COVERAGE.getKey());
+    Double scanCoverage = scanCoverageMeasure != null ? scanCoverageMeasure.getDoubleValue() : 0.0;
+    Double currentCoverage = currentCoverageMeasure != null ? currentCoverageMeasure.getDoubleValue() : 0.0;
     context.addMeasure(CoverageVariationMetrics.COVERAGE_VARIATION.key(), scanCoverage - currentCoverage);
+    context.addMeasure(CoverageVariationMetrics.NEW_COVERAGE_VARIATION.key(), scanCoverage - currentCoverage);
 
     // for debug purposes
     log.info("-------------------------------------------------------------");

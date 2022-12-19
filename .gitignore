@@ -29,3 +29,5 @@ sonar-example-plugin.iml
 .project
 .settings/
 .scannerwork
+report.xml
+coverage.xml

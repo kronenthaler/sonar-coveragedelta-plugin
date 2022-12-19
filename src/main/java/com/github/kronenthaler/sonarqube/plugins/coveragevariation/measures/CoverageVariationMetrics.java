@@ -18,6 +18,15 @@ public class CoverageVariationMetrics implements Metrics {
       .setDescription("Difference of the current coverage vs the on new code coverage.")
       .setDirection(Metric.DIRECTION_NONE)
       .setQualitative(false)
+      .setHidden(false)
+      .setDomain(CoreMetrics.DOMAIN_COVERAGE)
+      .create();
+
+  public static final Metric<Double> NEW_COVERAGE_VARIATION = new Metric.Builder("new_coverage_variation", "Coverage variation", Metric.ValueType.PERCENT)
+      .setDescription("Difference of the current overall coverage vs the on new code overall coverage on branches and pull requests.")
+      .setDirection(Metric.DIRECTION_NONE)
+      .setQualitative(false)
+      .setHidden(false)
       .setDomain(CoreMetrics.DOMAIN_COVERAGE)
       .create();
 
@@ -31,6 +40,6 @@ public class CoverageVariationMetrics implements Metrics {
 
   @Override
   public List<Metric> getMetrics() {
-    return asList(COVERAGE_VARIATION, PREVIOUS_COVERAGE);
+    return asList(NEW_COVERAGE_VARIATION, COVERAGE_VARIATION, PREVIOUS_COVERAGE);
   }
 }
