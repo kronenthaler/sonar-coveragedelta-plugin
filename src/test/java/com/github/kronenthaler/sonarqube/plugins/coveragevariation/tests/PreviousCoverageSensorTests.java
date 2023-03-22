@@ -33,8 +33,6 @@ public class PreviousCoverageSensorTests {
 
   @Test
   public void testExecuteWithErrorOnBranchRetrieval() {
-    System.err.println(basePath);
-
     Configuration configs = mock(Configuration.class);
     when(configs.get("sonar.host.url")).thenReturn(Optional.of(baseUrl + "failed/"));
     when(configs.get(CoreProperties.PROJECT_KEY_PROPERTY)).thenReturn(Optional.of("list-project"));
@@ -91,7 +89,8 @@ public class PreviousCoverageSensorTests {
       PreviousCoverageSensor sensor = new PreviousCoverageSensor();
       sensor.execute(context);
     }
-    verify(context, never()).newMeasure();
+
+    verify(context, times(1)).newMeasure();
   }
 
   @Test
@@ -140,6 +139,54 @@ public class PreviousCoverageSensorTests {
     assertEquals(CoverageVariationMetrics.PREVIOUS_COVERAGE, metricCapture.getValue());
     assertEquals(project, componentCapture.getValue());
     assertEquals((Double) 38.5, valueCapture.getValue());
+  }
+
+  @Test
+  public void testExecuteSuccessCreateMetricFirstScan() throws Exception {
+    Configuration configs = mock(Configuration.class);
+    when(configs.get("sonar.host.url")).thenReturn(Optional.of(baseUrl + "first_scan/"));
+    when(configs.get(CoreProperties.PROJECT_KEY_PROPERTY)).thenReturn(Optional.of("list-project"));
+    when(configs.get(CoreProperties.LOGIN)).thenReturn(Optional.of("user"));
+    when(configs.get(CoreProperties.PASSWORD)).thenReturn(Optional.of("123456"));
+    when(configs.getBoolean(CoverageVariationPlugin.COVERAGE_VARIATION_ENABLED_KEY)).thenReturn(Optional.of(true));
+
+    InputProject project = mock(InputProject.class);
+
+    ArgumentCaptor<Metric> metricCapture = ArgumentCaptor.forClass(Metric.class);
+    ArgumentCaptor<Double> valueCapture = ArgumentCaptor.forClass(Double.class);
+    ArgumentCaptor<InputComponent> componentCapture = ArgumentCaptor.forClass(InputComponent.class);
+
+    NewMeasure newMeasure = mock(NewMeasure.class);
+
+    SensorContext context = mock(SensorContext.class, RETURNS_DEEP_STUBS);
+    when(context.config()).thenReturn(configs);
+    when(context.project()).thenReturn(project);
+    when(context.newMeasure()
+        .forMetric(metricCapture.capture())
+        .on(componentCapture.capture())
+        .withValue(valueCapture.capture())).thenReturn(newMeasure);
+    doNothing().when(newMeasure).save();
+
+    try (MockedConstruction<SonarServerApi> server = Mockito.mockConstruction(SonarServerApi.class, (mock, mockingContext) -> {
+      Gson gson = new Gson();
+
+      String branches = new String(new BufferedInputStream(new FileInputStream(basePath + "first_scan/" + SonarServerApi.Endpoint.PROJECT_BRANCHES.path)).readAllBytes());
+      when(mock.connect(any(), eq(SonarProjectBranches.class)))
+          .thenReturn(gson.fromJson(branches, SonarProjectBranches.class));
+
+      String measure = new String(new BufferedInputStream(new FileInputStream(basePath + "first_scan/" + SonarServerApi.Endpoint.MEASURES.path)).readAllBytes());
+      when(mock.connect(any(), eq(SonarMeasure.class)))
+          .thenReturn(gson.fromJson(measure, SonarMeasure.class));
+
+    })) {
+      PreviousCoverageSensor sensor = new PreviousCoverageSensor();
+      sensor.execute(context);
+    }
+
+    verify(newMeasure, times(1)).save();
+    assertEquals(CoverageVariationMetrics.PREVIOUS_COVERAGE, metricCapture.getValue());
+    assertEquals(project, componentCapture.getValue());
+    assertEquals((Double) 0.0, valueCapture.getValue());
   }
 
   @Test

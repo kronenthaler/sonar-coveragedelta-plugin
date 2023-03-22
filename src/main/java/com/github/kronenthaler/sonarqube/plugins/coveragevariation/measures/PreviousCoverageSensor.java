@@ -81,25 +81,29 @@ public class PreviousCoverageSensor implements ProjectSensor {
   }
 
   private Double currentCoverage(SensorContext context) throws NoSuchElementException, IOException {
-    String branch = defaultBranch(context);
-    log.info("Main Branch: " + branch);
 
-    Configuration configs = context.config();
-    String componentKey = configs.get(org.sonar.api.CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
+      String branch = defaultBranch(context);
+      log.info("Main Branch: " + branch);
 
-    HashMap<String, String> params = new HashMap<>();
-    params.put("component", componentKey);
-    params.put("metricKeys", "coverage");
-    params.put("branch", branch);
+      Configuration configs = context.config();
+      String componentKey = configs.get(org.sonar.api.CoreProperties.PROJECT_KEY_PROPERTY).orElseThrow();
 
-    SonarServerApi api = new SonarServerApi(context.config().get("sonar.host.url").orElseThrow(), SonarServerApi.Endpoint.MEASURES, params);
+      HashMap<String, String> params = new HashMap<>();
+      params.put("component", componentKey);
+      params.put("metricKeys", "coverage");
+      params.put("branch", branch);
 
-    HashMap<String, String> headers = new HashMap<>();
-    headers.put("Authorization", getAuthorizationHeader(configs));
+      SonarServerApi api = new SonarServerApi(context.config().get("sonar.host.url").orElseThrow(), SonarServerApi.Endpoint.MEASURES, params);
 
-    SonarMeasure measure = api.connect(headers, SonarMeasure.class);
+      HashMap<String, String> headers = new HashMap<>();
+      headers.put("Authorization", getAuthorizationHeader(configs));
 
-    return Double.parseDouble(measure.getComponent().getMeasures()[0].getValue());
+      SonarMeasure measure = api.connect(headers, SonarMeasure.class);
+    try {
+      return Double.parseDouble(measure.getComponent().getMeasures()[0].getValue());
+    } catch (ArrayIndexOutOfBoundsException e){
+      return 0.0;
+    }
   }
 
   private String defaultBranch(SensorContext context) throws NoSuchElementException, IOException {
