@@ -50,7 +50,15 @@ public class PreviousCoverageSensor implements ProjectSensor {
   private static final Logger log = Loggers.get(PreviousCoverageSensor.class);
 
   private static String getAuthorizationHeader(Configuration configs) {
-    String payload = configs.get(CoreProperties.LOGIN).orElseThrow() + ":" + configs.get(CoreProperties.PASSWORD).orElse("");
+    String payload;
+    if (configs.get(CoreProperties.LOGIN).isPresent()){
+      payload = configs.get(CoreProperties.LOGIN).orElseThrow() + ":" + configs.get(CoreProperties.PASSWORD).orElse("");
+      log.info("Authenticating with sonar.login + sonar.password (deprecated)");
+    } else {
+      payload = configs.get("sonar.token").orElseThrow() + ":";
+      log.info("Authenticating with sonar.token");
+    }
+    
     return "Basic " + Base64.getEncoder().encodeToString(payload.getBytes());
   }
 

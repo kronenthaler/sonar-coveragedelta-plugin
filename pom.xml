@@ -5,14 +5,14 @@
   <groupId>com.github.kronenthaler.sonarqube.plugins.coveragevariation</groupId>
   <artifactId>sonar-coveragevariation-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>3.0.4</version>
+  <version>3.1.0</version>
 
   <name>Coverage Variation Plugin for SonarQube 9.x</name>
   <description>Plugin calculates the variation of the coverage between the current scan and the main branch's coverage</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <sonar.apiVersion>9.5.0.56709</sonar.apiVersion>
+    <sonar.apiVersion>10.1.0.73491</sonar.apiVersion>
     <jdk.min.version>1.8</jdk.min.version>
     <!-- Sonar cloud properties -->
     <sonar.organization>kronenthaler</sonar.organization>
